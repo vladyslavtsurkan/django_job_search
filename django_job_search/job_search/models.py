@@ -36,6 +36,7 @@ class Location(models.Model):
 class Job(models.Model):
     title = models.CharField("Job title", max_length=100)
 
+    degree = models.ForeignKey(Degree, on_delete=models.CASCADE, related_name="jobs")
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="jobs")
     locations = models.ManyToManyField(Location, related_name="jobs")
 
