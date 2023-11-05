@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from job_search.models import Organization, Degree, Location, Job
+from job_search.models import Organization, Degree, Location, Job, Spotlight
+
+
+class SpotlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Spotlight
+        fields = '__all__'
 
 
 class DegreeSerializer(serializers.ModelSerializer):

@@ -3,6 +3,15 @@ from django.db import models
 from django_jsonform.models.fields import ArrayField
 
 
+class Spotlight(models.Model):
+    title = models.CharField('Title', max_length=50)
+    img = models.URLField('Image')
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
 class Degree(models.Model):
     name = models.CharField("Degree name", max_length=30, unique=True)
 
@@ -38,7 +47,10 @@ class Job(models.Model):
         "Job type",
         max_length=50,
         choices=[
-            ("Full-time", "Full-time"), ("Part-time", "Part-time"), ("Temporary", "Temporary"), ("Intern", "Intern")
+            ("Full-time", "Full-time"),
+            ("Part-time", "Part-time"),
+            ("Intern", "Intern"),
+            ("Temporary", "Temporary"),
         ],
     )
 

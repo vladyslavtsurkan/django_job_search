@@ -5,13 +5,13 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
-from job_search.api.views import OrganizationViewSet, DegreeViewSet, LocationViewSet, JobViewSet
+from job_search.api.views import OrganizationViewSet, DegreeViewSet, LocationViewSet, JobViewSet, SpotlightViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Open Spotify API",
+        title="Job Search API",
         default_version="v1",
-        description="API for Spotify",
+        description="API for Job Search website",
     ),
     url=f"http://127.0.0.1:8000/api/v1/",
     public=True,
@@ -22,6 +22,7 @@ router.register('organizations', OrganizationViewSet)
 router.register('degrees', DegreeViewSet)
 router.register('locations', LocationViewSet)
 router.register('jobs', JobViewSet)
+router.register('spotlights', SpotlightViewSet)
 
 app_name = 'job_search'
 urlpatterns = [

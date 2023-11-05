@@ -197,10 +197,10 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
-        # "music_app.api.throttling.AnonSustainedThrottle",
-        # "music_app.api.throttling.AnonBurstThrottle",
-        # "music_app.api.throttling.UserSustainedThrottle",
-        # "music_app.api.throttling.UserBurstThrottle",
+        "job_search.api.throttling.AnonSustainedThrottle",
+        "job_search.api.throttling.AnonBurstThrottle",
+        "job_search.api.throttling.UserSustainedThrottle",
+        "job_search.api.throttling.UserBurstThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon_sustained": "500/day",

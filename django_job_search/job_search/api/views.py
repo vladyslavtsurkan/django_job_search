@@ -1,7 +1,18 @@
 from rest_framework.viewsets import ModelViewSet
 
-from job_search.models import Degree, Location, Organization, Job
-from job_search.api.serializers import DegreeSerializer, LocationSerializer, OrganizationSerializer, JobSerializer
+from job_search.models import Degree, Location, Organization, Job, Spotlight
+from job_search.api.serializers import (
+    DegreeSerializer,
+    LocationSerializer,
+    OrganizationSerializer,
+    JobSerializer,
+    SpotlightSerializer
+)
+
+
+class SpotlightViewSet(ModelViewSet):
+    queryset = Spotlight.objects.all()
+    serializer_class = SpotlightSerializer
 
 
 class DegreeViewSet(ModelViewSet):
