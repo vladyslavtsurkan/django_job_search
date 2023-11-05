@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  web:
+    restart: unless-stopped
+    image: django_job_search_app
+    build: django_job_search/.
+    ports:
+      - "8000:8000"
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./data/django-web:/usr/src/app
+      - ./data/django-static:/usr/src/app/static
+    env_file: .env
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py runserver 0.0.0.0:8000"
+
+  postgres:
+    image: postgres:15.4
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: django_job_search_db
+    volumes:
+      - ./data/db:/var/lib/postgresql/data:z
+
+  redis:
+    image: redis:7.0.9
+    restart: unless-stopped
+    expose:
+      - 6379
