@@ -1,3 +1,4 @@
 django==4.2.7
 djangorestframework==3.14.0
+django-jsonform==2.19.1
 psycopg2==2.9.9
