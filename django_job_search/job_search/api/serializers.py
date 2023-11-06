@@ -30,4 +30,18 @@ class LocationSerializer(serializers.ModelSerializer):
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
+        fields = [
+            'title',
+            'degree',
+            'locations',
+            'organization',
+            'minimum_qualifications',
+            'job_type',
+            'date_added'
+        ]
+
+
+class JobDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
         fields = '__all__'
