@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from django_jsonform.models.fields import ArrayField
@@ -21,6 +22,12 @@ class Degree(models.Model):
 
 class Organization(models.Model):
     name = models.CharField("Organization name", unique=True)
+    creator = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='organizations',
+        null=False,
+    )
 
     def __str__(self):
         return self.name

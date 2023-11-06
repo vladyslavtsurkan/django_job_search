@@ -16,18 +16,25 @@ class DegreeSerializer(serializers.ModelSerializer):
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    creator = serializers.CharField(source='creator.email', read_only=True)
+
     class Meta:
         model = Organization
         fields = '__all__'
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        return instance.name
+
     class Meta:
         model = Location
         fields = '__all__'
 
 
 class JobSerializer(serializers.ModelSerializer):
+    locations = LocationSerializer(many=True)
+
     class Meta:
         model = Job
         fields = [
