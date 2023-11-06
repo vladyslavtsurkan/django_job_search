@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'job_search',
 ]
 
-MIDDLEWARE = [
+if DEBUG:
+    INSTALLED_APPS += ['silk']
+
+MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] if DEBUG else []
+MIDDLEWARE += [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

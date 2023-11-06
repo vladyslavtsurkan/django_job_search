@@ -7,3 +7,4 @@ djangorestframework-simplejwt==5.3.0
 djangorestframework-camel-case==1.4.2
 drf-yasg==1.21.7
 psycopg2==2.9.9
+django-silk==5.0.4
