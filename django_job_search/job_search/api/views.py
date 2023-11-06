@@ -12,6 +12,7 @@ from job_search.api.serializers import (
     SpotlightSerializer
 )
 from job_search.api.filters import JobFilter
+from job_search.api.pagination import JobResultsPagePagination
 
 
 class SpotlightViewSet(ReadOnlyModelViewSet):
@@ -69,6 +70,7 @@ class OrganizationViewSet(ModelViewSet):
 class JobViewSet(ModelViewSet):
     queryset = Job.objects.all()
     filterset_class = JobFilter
+    pagination_class = JobResultsPagePagination
 
     def get_serializer_class(self):
         if self.action in ('list', 'create'):
