@@ -11,6 +11,7 @@ from job_search.api.serializers import (
     JobSerializer,
     SpotlightSerializer
 )
+from job_search.api.filters import JobFilter
 
 
 class SpotlightViewSet(ReadOnlyModelViewSet):
@@ -67,6 +68,7 @@ class OrganizationViewSet(ModelViewSet):
 
 class JobViewSet(ModelViewSet):
     queryset = Job.objects.all()
+    filterset_class = JobFilter
 
     def get_serializer_class(self):
         if self.action in ('list', 'create'):
