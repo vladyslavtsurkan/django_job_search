@@ -36,6 +36,8 @@ class LocationNameSerializer(LocationSerializer):
 
 class JobSerializer(serializers.ModelSerializer):
     locations = LocationNameSerializer(many=True)
+    degree = serializers.CharField(source='degree.name')
+    organization = serializers.CharField(source='organization.name')
 
     class Meta:
         model = Job
@@ -50,7 +52,7 @@ class JobSerializer(serializers.ModelSerializer):
         ]
 
 
-class JobDetailSerializer(serializers.ModelSerializer):
+class JobDetailSerializer(JobSerializer):
     class Meta:
         model = Job
         fields = '__all__'
