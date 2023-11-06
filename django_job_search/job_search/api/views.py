@@ -27,7 +27,7 @@ class SpotlightViewSet(ReadOnlyModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-class DegreeViewSet(ModelViewSet):
+class DegreeViewSet(ReadOnlyModelViewSet):
     queryset = Degree.objects.all()
     serializer_class = DegreeSerializer
 
