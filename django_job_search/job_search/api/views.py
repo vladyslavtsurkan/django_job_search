@@ -15,6 +15,7 @@ from job_search.api.serializers import (
 from job_search.api.filters import JobFilter
 from job_search.api.pagination import JobResultsPagePagination
 from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly
+from job_search.api.services import job_serializer_save_or_raise_exception_by_organization
 
 
 class SpotlightViewSet(ReadOnlyModelViewSet):
@@ -96,6 +97,12 @@ class JobViewSet(ModelViewSet):
             'title', 'degree', 'locations', 'organization', 'minimum_qualifications',
             'job_type', 'date_added'
         )
+
+    def perform_create(self, serializer):
+        job_serializer_save_or_raise_exception_by_organization(serializer, self.request.user)
+
+    def perform_update(self, serializer):
+        job_serializer_save_or_raise_exception_by_organization(serializer, self.request.user)
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):

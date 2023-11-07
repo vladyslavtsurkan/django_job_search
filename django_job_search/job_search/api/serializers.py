@@ -40,6 +40,22 @@ class JobSerializer(serializers.ModelSerializer):
     degree = serializers.CharField(source='degree.name')
     organization = serializers.CharField(source='organization.name')
 
+    def validate_organization(self, value):
+        try:
+            Organization.objects.get(name=value)
+        except Organization.DoesNotExist:
+            raise ValidationError(f'Object with name={value} does not exist.')
+
+        return value
+
+    def validate_degree(self, value):
+        try:
+            Degree.objects.get(name=value)
+        except Degree.DoesNotExist:
+            raise ValidationError(f'Object with name={value} does not exist.')
+
+        return value
+
     def create(self, validated_data):
         degree_name = validated_data.pop('degree')['name']
         organization_name = validated_data.pop('organization')['name']
@@ -68,18 +84,12 @@ class JobSerializer(serializers.ModelSerializer):
 
         if degree_data is not None:
             degree_name = degree_data.get('name')
-            try:
-                degree = Degree.objects.get(name=degree_name)
-            except Degree.DoesNotExist:
-                raise ValidationError({'degree': [f'Object with name={degree_name} does not exist.']})
+            degree = Degree.objects.get(name=degree_name)
             validated_data['degree'] = degree
 
         if organization_data is not None:
             organization_name = organization_data.get('name')
-            try:
-                organization = Organization.objects.get(name=organization_name)
-            except Organization.DoesNotExist:
-                raise ValidationError({'organization': [f'Object with name={organization_name} does not exist.']})
+            organization = Organization.objects.get(name=organization_name)
             validated_data['organization'] = organization
 
         location_names = validated_data.pop('locations', None)
