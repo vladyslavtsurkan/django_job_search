@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAdminUser, SAFE_METHODS
 
 
 class IsCreatorOrReadOnly(BasePermission):
@@ -15,3 +15,9 @@ class IsCreatorJobOrganizationOrReadonly(BasePermission):
             return True
 
         return obj.organization.creator == request.user
+
+
+class IsAdminUserOrReadonly(IsAdminUser):
+    def has_permission(self, request, view):
+        is_admin = super().has_permission(request, view)
+        return request.method in SAFE_METHODS or is_admin

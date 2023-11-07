@@ -1,6 +1,6 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from job_search.models import Degree, Location, Organization, Job, Spotlight
@@ -14,13 +14,13 @@ from job_search.api.serializers import (
 )
 from job_search.api.filters import JobFilter
 from job_search.api.pagination import JobResultsPagePagination
-from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly
-from job_search.api.services import job_serializer_save_or_raise_exception_by_organization
+from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly, IsAdminUserOrReadonly
 
 
-class SpotlightViewSet(ReadOnlyModelViewSet):
+class SpotlightViewSet(ModelViewSet):
     queryset = Spotlight.objects.all()
     serializer_class = SpotlightSerializer
+    permission_classes = [IsAdminUserOrReadonly]
 
     @method_decorator(cache_page(300))
     def list(self, request, *args, **kwargs):
@@ -31,9 +31,10 @@ class SpotlightViewSet(ReadOnlyModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-class DegreeViewSet(ReadOnlyModelViewSet):
+class DegreeViewSet(ModelViewSet):
     queryset = Degree.objects.all()
     serializer_class = DegreeSerializer
+    permission_classes = [IsAdminUserOrReadonly]
 
     @method_decorator(cache_page(300))
     def list(self, request, *args, **kwargs):
@@ -86,7 +87,7 @@ class JobViewSet(ModelViewSet):
         return JobDetailSerializer
 
     def get_queryset(self):
-        if self.action not in ('list', 'create'):
+        if self.action in ('retrieve', 'create', 'update', 'partial_update'):
             return self.queryset.all().select_related(
                 'degree', 'organization',
             ).prefetch_related('locations')
@@ -97,12 +98,6 @@ class JobViewSet(ModelViewSet):
             'title', 'degree', 'locations', 'organization', 'minimum_qualifications',
             'job_type', 'date_added'
         )
-
-    def perform_create(self, serializer):
-        job_serializer_save_or_raise_exception_by_organization(serializer, self.request.user)
-
-    def perform_update(self, serializer):
-        job_serializer_save_or_raise_exception_by_organization(serializer, self.request.user)
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):

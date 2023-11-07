@@ -42,9 +42,13 @@ class JobSerializer(serializers.ModelSerializer):
 
     def validate_organization(self, value):
         try:
-            Organization.objects.get(name=value)
+            organization = Organization.objects.get(name=value)
         except Organization.DoesNotExist:
             raise ValidationError(f'Object with name={value} does not exist.')
+
+        request = self.context.get('request')
+        if organization.creator != request.user:
+            raise ValidationError('Creator of this organization is not of current user.')
 
         return value
 
@@ -60,15 +64,11 @@ class JobSerializer(serializers.ModelSerializer):
         degree_name = validated_data.pop('degree')['name']
         organization_name = validated_data.pop('organization')['name']
 
-        degree = Degree.objects.get(name=degree_name)
-        organization = Organization.objects.get(name=organization_name)
+        validated_data['degree'] = Degree.objects.get(name=degree_name)
+        validated_data['organization'] = Organization.objects.get(name=organization_name)
         location_names = validated_data.pop('locations')
 
-        job = Job.objects.create(
-            degree=degree,
-            organization=organization,
-            **validated_data
-        )
+        job = Job.objects.create(**validated_data)
 
         for location_name in location_names:
             location, _ = Location.objects.get_or_create(name=location_name)
@@ -121,19 +121,15 @@ class JobSerializer(serializers.ModelSerializer):
             'job_type',
             'date_added'
         ]
+        extra_kwargs = {'date_added': {'read_only': True}}
 
 
 class JobDetailSerializer(JobSerializer):
     class Meta:
         model = Job
-        fields = [
-            'id',
-            'title',
-            'degree',
-            'organization',
-            'locations',
-            'minimum_qualifications',
-            'preferred_qualifications',
-            'job_type',
-            'description'
-        ]
+        fields = '__all__'
+        extra_kwargs = {
+            'date_added': {'read_only': True},
+            'date_updated': {'read_only': True},
+        }
+
