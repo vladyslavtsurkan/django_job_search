@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from job_search.models import Organization, Degree, Location, Job, Spotlight
+from job_search.api.fields import SlugRelatedCreationField
 
 
 class SpotlightSerializer(serializers.ModelSerializer):
@@ -30,7 +32,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
-    locations = serializers.SlugRelatedField(
+    locations = SlugRelatedCreationField(
         many=True,
         slug_field='name',
         queryset=Location.objects.all()
@@ -66,12 +68,18 @@ class JobSerializer(serializers.ModelSerializer):
 
         if degree_data is not None:
             degree_name = degree_data.get('name')
-            degree = Degree.objects.get(name=degree_name)
+            try:
+                degree = Degree.objects.get(name=degree_name)
+            except Degree.DoesNotExist:
+                raise ValidationError({'degree': [f'Object with name={degree_name} does not exist.']})
             validated_data['degree'] = degree
 
         if organization_data is not None:
             organization_name = organization_data.get('name')
-            organization = Organization.objects.get(name=organization_name)
+            try:
+                organization = Organization.objects.get(name=organization_name)
+            except Organization.DoesNotExist:
+                raise ValidationError({'organization': [f'Object with name={organization_name} does not exist.']})
             validated_data['organization'] = organization
 
         location_names = validated_data.pop('locations', None)
@@ -108,4 +116,14 @@ class JobSerializer(serializers.ModelSerializer):
 class JobDetailSerializer(JobSerializer):
     class Meta:
         model = Job
-        fields = '__all__'
+        fields = [
+            'id',
+            'title',
+            'degree',
+            'organization',
+            'locations',
+            'minimum_qualifications',
+            'preferred_qualifications',
+            'job_type',
+            'description'
+        ]
