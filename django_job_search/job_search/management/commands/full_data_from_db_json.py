@@ -1,5 +1,4 @@
 import json
-from datetime import date
 
 from django.core.management import BaseCommand
 
@@ -28,7 +27,8 @@ class Command(BaseCommand):
         for job in jobs:
             degree_instance = Degree.objects.get(name=job.get('degree'))
             organization_instance, created = Organization.objects.get_or_create(
-                name=job.get('organization')
+                name=job.get('organization'),
+                creator_id=1
             )
 
             job_instance, created = Job.objects.get_or_create(
