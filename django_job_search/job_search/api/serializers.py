@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from job_search.models import Organization, Degree, Location, Job, Spotlight
 from job_search.api.fields import SlugRelatedCreationField
+from job_search.models import Organization, Degree, Location, Job, Spotlight
 
 
 class SpotlightSerializer(serializers.ModelSerializer):

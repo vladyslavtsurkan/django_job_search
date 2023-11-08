@@ -1,9 +1,11 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.viewsets import ModelViewSet
 
-from job_search.models import Degree, Location, Organization, Job, Spotlight
+from job_search.api.filters import JobFilter
+from job_search.api.pagination import JobResultsPagePagination
+from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly, IsAdminUserOrReadonly
 from job_search.api.serializers import (
     DegreeSerializer,
     LocationSerializer,
@@ -12,9 +14,7 @@ from job_search.api.serializers import (
     JobSerializer,
     SpotlightSerializer
 )
-from job_search.api.filters import JobFilter
-from job_search.api.pagination import JobResultsPagePagination
-from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly, IsAdminUserOrReadonly
+from job_search.models import Degree, Location, Organization, Job, Spotlight
 
 
 class SpotlightViewSet(ModelViewSet):
