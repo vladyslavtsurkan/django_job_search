@@ -47,7 +47,7 @@ class JobSerializer(serializers.ModelSerializer):
             raise ValidationError(f'Object with name={value} does not exist.')
 
         request = self.context.get('request')
-        if organization.creator != request.user:
+        if request is not None and organization.creator != request.user:
             raise ValidationError('Creator of this organization is not of current user.')
 
         return value
