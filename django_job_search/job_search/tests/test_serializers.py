@@ -1,4 +1,5 @@
 from django.test import TestCase
+from rest_framework.exceptions import ValidationError
 
 from job_search.api.serializers import (
     JobSerializer,
@@ -58,8 +59,48 @@ class SerializerTests(TestCase):
             'organization': organization.name,
             'locations': [location.name],
             'minimum_qualifications': ['Test Qualification'],
+            'preferred_qulifications': ['Test Qualification'],
+            'description': ['Test Description'],
             'job_type': 'Full-time'
         }
 
         serializer = JobSerializer(data=data)
         self.assertTrue(serializer.is_valid())
+
+    def test_invalid_organization_validation(self):
+        degree = Degree.objects.create(name='Test Degree')
+        data = {
+            'title': 'Test Job',
+            'degree': degree.name,
+            'organization': 'NonExistentOrganization',
+            'locations': ['Test Location'],
+            'minimum_qualifications': ['Test Qualification'],
+            'preferred_qulifications': ['Test Qualification'],
+            'description': ['Test Description'],
+            'job_type': 'Full-time'
+        }
+
+        serializer = JobSerializer(data=data)
+
+        with self.assertRaises(ValidationError) as context:
+            serializer.is_valid(raise_exception=True)
+            self.assertIn('Object with name=NonExistentOrganization does not exist.', str(context.exception))
+
+    def test_invalid_degree_validation(self):
+        organization = Organization.objects.create(name='Test Organization', creator=self.user)
+        data = {
+            'title': 'Test Job',
+            'degree': 'NonExistentDegree',
+            'organization': organization.name,
+            'locations': ['Test Location'],
+            'minimum_qualifications': ['Test Qualification'],
+            'preferred_qulifications': ['Test Qualification'],
+            'description': ['Test Description'],
+            'job_type': 'Full-time'
+        }
+
+        serializer = JobSerializer(data=data)
+
+        with self.assertRaises(ValidationError) as context:
+            serializer.is_valid(raise_exception=True)
+            self.assertIn('Object with name=NonExistentDegree does not exist.', str(context.exception))
