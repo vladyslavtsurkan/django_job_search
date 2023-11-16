@@ -21,7 +21,7 @@ services:
              python3 manage.py runserver 0.0.0.0:8000"
 
   postgres:
-    image: postgres:16.0
+    image: postgres:16.1
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -33,7 +33,7 @@ services:
       - ./data/db:/var/lib/postgresql/data:z
 
   redis:
-    image: redis:7.0.9
+    image: redis:7.2.3
     restart: unless-stopped
     expose:
       - 6379
