@@ -5,7 +5,7 @@ from job_search.models import Job, Organization, Degree
 from job_search.api.filters import JobFilter
 
 
-class JobFilterTestCase(TestCase):
+class FilterTests(TestCase):
     def setUp(self):
         user = get_user_model().objects.create_user(email='test@example.com', password='Hdsjsjd1232')
         org = Organization.objects.create(name='Microsoft', creator=user)
@@ -19,18 +19,18 @@ class JobFilterTestCase(TestCase):
             description=['Python', 'Django', 'Django REST Framework'],
         )
 
-    def test_filter_by_exact_organization_name(self):
+    def test_job_filter_by_exact_organization_name(self):
         f = JobFilter({'organization': 'Microsoft'}, queryset=Job.objects.all())
         self.assertEqual(len(f.qs), 1)
 
-    def test_filter_by_exact_degree_name(self):
+    def test_job_filter_by_exact_degree_name(self):
         f = JobFilter({'degree': 'Bachelor'}, queryset=Job.objects.all())
         self.assertEqual(len(f.qs), 1)
 
-    def test_filter_by_non_existent_organization(self):
+    def test_job_filter_by_non_existent_organization(self):
         f = JobFilter({'organization': 'Google'}, queryset=Job.objects.all())
         self.assertEqual(len(f.qs), 0)
 
-    def test_filter_by_non_existent_degree(self):
+    def test_job_filter_by_non_existent_degree(self):
         f = JobFilter({'degree': 'Master'}, queryset=Job.objects.all())
         self.assertEqual(len(f.qs), 0)
