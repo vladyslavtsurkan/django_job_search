@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 
 from job_search.api.serializers import (
@@ -9,12 +10,11 @@ from job_search.api.serializers import (
     SpotlightSerializer,
 )
 from job_search.models import Organization, Location, Degree
-from accounts.models import CustomUser
 
 
 class SerializerTests(TestCase):
     def setUp(self):
-        self.user = CustomUser.objects.create_user(
+        self.user = get_user_model().objects.create_user(
             email='test@example.com',
             password='Hjsajk141'
         )
