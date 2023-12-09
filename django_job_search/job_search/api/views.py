@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from job_search.api.filters import JobFilter
-from job_search.api.pagination import JobResultsPagePagination
+from job_search.api.pagination import JobResultsPagePagination, LocationResultsPagePagination
 from job_search.api.permissions import IsCreatorOrReadOnly, IsCreatorJobOrganizationOrReadonly, IsAdminUserOrReadonly
 from job_search.api.serializers import (
     DegreeSerializer,
@@ -48,6 +48,7 @@ class DegreeViewSet(ModelViewSet):
 class LocationViewSet(ReadOnlyModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    pagination_class = LocationResultsPagePagination
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):
