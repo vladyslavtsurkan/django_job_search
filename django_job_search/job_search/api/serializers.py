@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, PermissionDenied
 
 from job_search.api.fields import SlugRelatedCreationField
 from job_search.models import Organization, Degree, Location, Job, Spotlight
@@ -48,7 +48,7 @@ class JobSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
         if request is not None and organization.creator != request.user:
-            raise ValidationError('Creator of this organization is not of current user.')
+            raise PermissionDenied('Creator of this organization is not of current user.')
 
         return value
 

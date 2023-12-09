@@ -1,7 +1,7 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from job_search.api.filters import JobFilter
 from job_search.api.pagination import JobResultsPagePagination
@@ -45,7 +45,7 @@ class DegreeViewSet(ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-class LocationViewSet(ModelViewSet):
+class LocationViewSet(ReadOnlyModelViewSet):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 

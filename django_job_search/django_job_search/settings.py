@@ -73,6 +73,7 @@ TEMPLATES = [
     },
 ]
 
+LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -108,7 +109,7 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "DEBUG",
+        "level": LOG_LEVEL,
     },
 }
 
@@ -211,9 +212,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_RATES": {
         "anon_sustained": "500/day",
-        "anon_burst": "10/minute",
+        "anon_burst": "100/minute",
         "user_sustained": "5000/day",
-        "user_burst": "100/minute",
+        "user_burst": "400/minute",
     },
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 50,
