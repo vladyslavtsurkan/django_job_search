@@ -44,8 +44,9 @@ class ModelTests(TestCase):
         self.assertEqual(name, location.name)
 
     def test_job_creation_is_successful(self):
+        title = 'Test Job'
         job = Job.objects.create(
-            title='Test Job',
+            title=title,
             degree=self.degree,
             organization=self.organization,
             preferred_qualifications=['Test Qualification'],
@@ -55,3 +56,7 @@ class ModelTests(TestCase):
         )
         job.locations.set([self.location])
         self.assertTrue(isinstance(job, Job))
+        self.assertEqual(title, job.title)
+        self.assertEqual(self.degree, job.degree)
+        self.assertEqual(self.organization, job.organization)
+        self.assertEqual('Full-time', job.job_type)

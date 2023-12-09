@@ -35,5 +35,5 @@ services:
   redis:
     image: redis:7.2.3
     restart: unless-stopped
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"

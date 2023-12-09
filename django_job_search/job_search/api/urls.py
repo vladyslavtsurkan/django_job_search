@@ -24,7 +24,6 @@ router.register('locations', LocationViewSet)
 router.register('jobs', JobViewSet)
 router.register('spotlights', SpotlightViewSet)
 
-app_name = 'job_search'
 urlpatterns = [
     path('', include(router.urls)),
     path('token-auth', obtain_auth_token),

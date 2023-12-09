@@ -131,13 +131,14 @@ DATABASES = {
 # Redis settings
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+REDIS_DB = os.environ.get('REDIS_DB', '0')
 
 # Caching
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
