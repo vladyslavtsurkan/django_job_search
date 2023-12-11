@@ -1,3 +1,15 @@
+"""
+This module defines the models for the Job Search application.
+
+The models include:
+- Spotlight: Represents a spotlight item with a title, image, and description.
+- Degree: Represents a degree with a unique name.
+- Organization: Represents an organization with a unique name and a creator.
+- Location: Represents a location with a unique name.
+- Job: Represents a job with a title, associated degree, organization, and locations, 
+  preferred and minimum qualifications, a description, job type, and dates when the job was added and updated.
+"""
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +18,10 @@ from django_jsonform.models.fields import ArrayField
 
 
 class Spotlight(models.Model):
+    """
+    Spotlight model.
+    Represents a spotlight item with a title, image, and description.
+    """
     title = models.CharField(_('title'), max_length=50)
     img = models.URLField(_('image'))
     description = models.TextField(_('description'))
@@ -19,6 +35,10 @@ class Spotlight(models.Model):
 
 
 class Degree(models.Model):
+    """
+    Degree model.
+    Represents a degree with a unique name.
+    """
     name = models.CharField(_("degree name"), max_length=30, unique=True)
 
     class Meta:
@@ -30,6 +50,10 @@ class Degree(models.Model):
 
 
 class Organization(models.Model):
+    """
+    Organization model.
+    Represents an organization with a unique name and a creator.
+    """
     name = models.CharField(_("organization name"), unique=True)
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -47,6 +71,10 @@ class Organization(models.Model):
 
 
 class Location(models.Model):
+    """
+    Location model.
+    Represents a location with a unique name.
+    """
     name = models.CharField(_("location name"), unique=True)
 
     class Meta:
@@ -58,6 +86,11 @@ class Location(models.Model):
 
 
 class Job(models.Model):
+    """
+    Job model.
+    Represents a job with a title, associated degree, organization, and locations, 
+    preferred and minimum qualifications, a description, job type, and dates when the job was added and updated.
+    """
     title = models.CharField(_("job title"), max_length=100)
 
     degree = models.ForeignKey(Degree, on_delete=models.CASCADE, related_name="jobs")

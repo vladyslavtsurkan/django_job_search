@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 
 class SlugRelatedCreationField(serializers.SlugRelatedField):
+    """Custom SlugRelatedField for creating non-existent objects."""
     def to_internal_value(self, data):
         queryset = self.get_queryset()
         try:

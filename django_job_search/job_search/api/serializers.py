@@ -6,18 +6,21 @@ from job_search.models import Organization, Degree, Location, Job, Spotlight
 
 
 class SpotlightSerializer(serializers.ModelSerializer):
+    """Serializer for Spotlight model."""
     class Meta:
         model = Spotlight
         fields = '__all__'
 
 
 class DegreeSerializer(serializers.ModelSerializer):
+    """Serializer for Degree model."""
     class Meta:
         model = Degree
         fields = '__all__'
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    """Serializer for Organization model with using creator email instead of id."""
     creator = serializers.CharField(source='creator.email', read_only=True)
 
     class Meta:
@@ -26,6 +29,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    """Serializer for Location model with using name instead of full object."""
     def to_representation(self, instance):
         return instance.name
 
@@ -35,6 +39,10 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class JobSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Job model with using custom SlugRelatedCreationField for
+    creating non-existent locations.
+    """
     locations = SlugRelatedCreationField(
         many=True,
         slug_field='name',
@@ -56,6 +64,7 @@ class JobSerializer(serializers.ModelSerializer):
         return value
 
     def validate_degree(self, value):
+        """Validate that degree with given name exists."""
         try:
             Degree.objects.get(name=value)
         except Degree.DoesNotExist:
@@ -128,6 +137,7 @@ class JobSerializer(serializers.ModelSerializer):
 
 
 class JobDetailSerializer(JobSerializer):
+    """Serializer for Job model in detail endpoint."""
     class Meta:
         model = Job
         fields = '__all__'
