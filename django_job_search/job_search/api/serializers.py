@@ -26,6 +26,9 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        return instance.name
+
     class Meta:
         model = Location
         fields = '__all__'

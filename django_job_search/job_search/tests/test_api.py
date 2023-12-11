@@ -281,10 +281,6 @@ class LocationViewSetTestCase(TestCase):
         response = self.client.get(reverse('job_search:location-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_retrieve_location(self):
-        response = self.client.get(reverse('job_search:location-detail', kwargs={'pk': self.location.pk}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
 class OrganizationViewSetTestCase(TestCase):
     def setUp(self):
@@ -446,7 +442,6 @@ class JobViewSetTestCase(TestCase):
             'description': ['Test Description'],
         }
         response = self.client.post(reverse('job_search:job-list'), data=data)
-        print(f'AAAAAAAAAAAAAAAA: {response.data}')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_job_as_unauthenticated(self):
