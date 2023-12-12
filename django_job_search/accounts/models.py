@@ -35,3 +35,4 @@ class CustomUser(AbstractUser):
             str: The email of the user.
         """
         return self.email
+    

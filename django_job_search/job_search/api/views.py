@@ -4,7 +4,7 @@ This module contains the views for the API.
 # Required Django and Rest Framework imports
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.mixins import ListModelMixin
 
@@ -51,6 +51,22 @@ class SpotlightViewSet(ModelViewSet):
         """
         return super().retrieve(request, *args, **kwargs)
 
+    def create(self, request, *args, **kwargs):
+        """For admins. Create a new Spotlight."""
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """For admins. Update a specific Spotlight."""
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """For admins. Partially update a specific Spotlight."""
+        return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """For admins. Delete a specific Spotlight."""
+        return super().destroy(request, *args, **kwargs)
+
 
 class DegreeViewSet(ModelViewSet):
     """
@@ -71,10 +87,24 @@ class DegreeViewSet(ModelViewSet):
 
     @method_decorator(cache_page(300))
     def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieve a specific Degree.
-        """
+        """Retrieve a specific Degree."""
         return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        """For admins. Create a new Degree."""
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """For admins. Update a specific Degree."""
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """For admins. Partially update a specific Degree."""
+        return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """For admins. Delete a specific Degree."""
+        return super().destroy(request, *args, **kwargs)
 
 
 class LocationViewSet(GenericViewSet, ListModelMixin):
@@ -89,9 +119,7 @@ class LocationViewSet(GenericViewSet, ListModelMixin):
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):
-        """
-        List all the Locations.
-        """
+        """List all the Locations."""
         return super().list(request, *args, **kwargs)
 
 
@@ -103,7 +131,7 @@ class OrganizationViewSet(ModelViewSet):
     """
     queryset = Organization.objects.select_related('creator')
     serializer_class = OrganizationSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly & IsCreatorOrReadOnly]
+    permission_classes = [IsAuthenticated & IsCreatorOrReadOnly]
 
     def perform_create(self, serializer):
         """
@@ -113,17 +141,29 @@ class OrganizationViewSet(ModelViewSet):
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):
-        """
-        List all the Organizations.
-        """
+        """List all the Organizations."""
         return super().list(request, *args, **kwargs)
 
     @method_decorator(cache_page(120))
     def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieve a specific Organization.
-        """
+        """Retrieve a specific Organization."""
         return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        """Create a new Organization."""
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """Update a specific Organization."""
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Partially update a specific Organization."""
+        return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """Delete a specific Organization."""
+        return super().destroy(request, *args, **kwargs)
 
 
 class JobViewSet(ModelViewSet):
@@ -135,7 +175,7 @@ class JobViewSet(ModelViewSet):
     queryset = Job.objects.all()
     filterset_class = JobFilter
     pagination_class = JobResultsPagePagination
-    permission_classes = [IsAuthenticatedOrReadOnly & IsCreatorJobOrganizationOrReadonly]
+    permission_classes = [IsAuthenticated & IsCreatorJobOrganizationOrReadonly]
 
     def get_serializer_class(self):
         """
@@ -163,14 +203,28 @@ class JobViewSet(ModelViewSet):
 
     @method_decorator(cache_page(120))
     def list(self, request, *args, **kwargs):
-        """
-        List all the Jobs.
-        """
+        """List all the Jobs."""
         return super().list(request, *args, **kwargs)
 
     @method_decorator(cache_page(120))
     def retrieve(self, request, *args, **kwargs):
-        """
-        Retrieve a specific Job.
-        """
+        """Retrieve a specific Job."""
         return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        """
+        Create a new Job. You can use only organization, which you created before.
+        """
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """Update a specific Job."""
+        return super().update(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Partially update a specific Job."""
+        return super().partial_update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        """Delete a specific Job."""
+        return super().destroy(request, *args, **kwargs)
