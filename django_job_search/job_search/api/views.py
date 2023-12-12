@@ -107,7 +107,7 @@ class DegreeViewSet(ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
-class LocationViewSet(GenericViewSet, ListModelMixin):
+class LocationViewSet(ListModelMixin, GenericViewSet):
     """
     ViewSet for Location model.
     Only supports listing of Locations.
