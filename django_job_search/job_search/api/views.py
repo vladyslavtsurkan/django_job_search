@@ -4,7 +4,7 @@ This module contains the views for the API.
 # Required Django and Rest Framework imports
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.mixins import ListModelMixin
 
@@ -131,7 +131,7 @@ class OrganizationViewSet(ModelViewSet):
     """
     queryset = Organization.objects.select_related('creator')
     serializer_class = OrganizationSerializer
-    permission_classes = [IsAuthenticated & IsCreatorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly & IsCreatorOrReadOnly]
 
     def perform_create(self, serializer):
         """
@@ -175,7 +175,7 @@ class JobViewSet(ModelViewSet):
     queryset = Job.objects.all()
     filterset_class = JobFilter
     pagination_class = JobResultsPagePagination
-    permission_classes = [IsAuthenticated & IsCreatorJobOrganizationOrReadonly]
+    permission_classes = [IsAuthenticatedOrReadOnly & IsCreatorJobOrganizationOrReadonly]
 
     def get_serializer_class(self):
         """
