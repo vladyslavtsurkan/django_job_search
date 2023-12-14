@@ -12,6 +12,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - elastic
     volumes:
       - ./data/django-web:/usr/src/app
       - ./data/django-static:/usr/src/app/static
@@ -19,6 +20,18 @@ services:
     command: >
       sh -c "python3 manage.py migrate &&
              python3 manage.py runserver 0.0.0.0:8000"
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=changeme
+      - ELASTIC_USERNAME=elastic
+    volumes:
+      - ./data/elastic:/usr/share/elasticsearch/data:z
 
   postgres:
     image: postgres:16.1

@@ -48,6 +48,9 @@ urlpatterns = [
     # Include the accounts URLs
     path('accounts/', include('accounts.api.urls')),
 
+    # Include the search URLs
+    path('search/', include('search.urls')),
+
     # URLs for the API documentation in JSON and YAML formats
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",

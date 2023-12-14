@@ -33,10 +33,13 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'djangorestframework_camel_case',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
 
     # my apps
     'accounts',
     'job_search',
+    'search',
 ]
 
 if DEBUG:
@@ -59,8 +62,7 @@ ROOT_URLCONF = 'django_job_search.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -144,6 +146,23 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+}
+
+# Elasticsearch settings
+ELASTICSEARCH_HOST = os.environ.get('ELASTICSEARCH_HOST', 'localhost')
+ELASTICSEARCH_PORT = os.environ.get('ELASTICSEARCH_PORT', '9200')
+ELASTICSEARCH_USER = os.environ.get('ELASTICSEARCH_USERNAME', 'elastic')
+ELASTICSEARCH_PASSWORD = os.environ.get('ELASTICSEARCH_PASSWORD', 'changeme')
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': f'http://{ELASTICSEARCH_HOST}:{ELASTICSEARCH_PORT}',
+        'http_auth': (ELASTICSEARCH_USER, ELASTICSEARCH_PASSWORD)
+    },
+}
+
+ELASTICSEARCH_INDEX_NAMES = {
+    'search.documents.JobDocument': 'jobs',
 }
 
 # Password validation

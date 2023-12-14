@@ -1,4 +1,4 @@
-FROM python:3.11.5
+FROM python:3.11.7
 
 WORKDIR django_job_search_app
 
