@@ -1,9 +1,11 @@
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from django_elasticsearch_dsl_drf.filter_backends import (
     SearchFilterBackend,
+    MultiMatchSearchFilterBackend,
     FilteringFilterBackend,
     SuggesterFilterBackend,
     FunctionalSuggesterFilterBackend,
+    DefaultOrderingFilterBackend,
 )
 
 from search.documents import JobDocument
@@ -16,21 +18,34 @@ class JobDocumentViewSet(DocumentViewSet):
 
     filter_backends = [
         SearchFilterBackend,
+        MultiMatchSearchFilterBackend,
         FilteringFilterBackend,
         SuggesterFilterBackend,
         FunctionalSuggesterFilterBackend,
+        DefaultOrderingFilterBackend,
     ]
 
-    search_fields = (
-        'job_title',
-        'degree',
-        'organization',
-        'locations',
-        'preferred_qualifications',
-        'minimum_qualifications',
-        'description',
-        'job_type',
-    )
+    search_fields = {
+        'job_title': {'fuzziness': 'AUTO'},
+        'degree': None,
+        'organization': {'fuzziness': 'AUTO'},
+        'locations': None,
+        'preferred_qualifications': None,
+        'minimum_qualifications': None,
+        'description': None,
+        'job_type': None,
+    }
+
+    multi_match_search_fields = {
+        'job_title': {'fuzziness': 'AUTO'},
+        'degree': None,
+        'organization': {'fuzziness': 'AUTO'},
+        'locations': None,
+        'preferred_qualifications': None,
+        'minimum_qualifications': None,
+        'description': None,
+        'job_type': None,
+    }
 
     filter_fields = {
         'job_title': 'job_title',
