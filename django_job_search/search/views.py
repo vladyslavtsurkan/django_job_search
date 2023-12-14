@@ -3,6 +3,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     SearchFilterBackend,
     FilteringFilterBackend,
     SuggesterFilterBackend,
+    FunctionalSuggesterFilterBackend,
 )
 
 from search.documents import JobDocument
@@ -17,12 +18,13 @@ class JobDocumentViewSet(DocumentViewSet):
         SearchFilterBackend,
         FilteringFilterBackend,
         SuggesterFilterBackend,
+        FunctionalSuggesterFilterBackend,
     ]
 
     search_fields = (
         'job_title',
-        'job_degree',
-        'job_organization',
+        'degree',
+        'organization',
         'locations',
         'preferred_qualifications',
         'minimum_qualifications',
@@ -31,22 +33,27 @@ class JobDocumentViewSet(DocumentViewSet):
     )
 
     filter_fields = {
-        'id': None,
-        'job_title': 'job_title.raw',
-        'job_degree': 'job_degree.name.raw',
-        'job_organization': 'job_organization.name.raw',
-        'locations': 'locations.name.raw',
-        'preferred_qualifications': 'preferred_qualifications.raw',
-        'minimum_qualifications': 'minimum_qualifications.raw',
-        'description': 'description.raw',
-        'job_type': 'job_type.raw',
-        'date_added': 'date_added',
-        'date_updated': 'date_updated',
+        'job_title': 'job_title',
+        'degree': 'job_degree.name',
+        'organization': 'job_organization.name',
+        'locations': 'locations.name',
+        'job_type': 'job_type',
+
     }
 
     suggester_fields = {
         'job_title_suggest': {
             'field': 'job_title.suggest',
+            'suggesters': [
+                'job_title_suggest',
+                'job_title_suggest_context',
+            ],
+            'default_suggester': 'job_title_suggest',
+        },
+    }
+
+    functional_suggester_fields = {
+        'job_title_suggest': {
             'suggesters': [
                 'job_title_suggest',
                 'job_title_suggest_context',

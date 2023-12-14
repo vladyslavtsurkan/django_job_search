@@ -6,6 +6,7 @@ from job_search.models import Job
 
 @registry.register_document
 class JobDocument(Document):
+    id = fields.IntegerField(attr='id')
     job_title = fields.TextField(
         attr='title',
         fields={
@@ -13,15 +14,15 @@ class JobDocument(Document):
             'suggest': fields.Completion(),
         }
     )
-    job_degree = fields.ObjectField(
-        attr='get_degree',
+    degree = fields.ObjectField(
+        attr='degree',
         properties={
             'id': fields.IntegerField(),
             'name': fields.TextField(),
         }
     )
-    job_organization = fields.ObjectField(
-        attr='get_organization',
+    organization = fields.ObjectField(
+        attr='organization',
         properties={
             'id': fields.IntegerField(),
             'name': fields.TextField(),
@@ -44,18 +45,6 @@ class JobDocument(Document):
 
     date_added = fields.DateField(attr='date_added')
     date_updated = fields.DateField(attr='date_updated')
-
-    def get_degree(self, obj):
-        return {
-            'id': obj.degree.id,
-            'name': obj.degree.name,
-        }
-
-    def get_organization(self, obj):
-        return {
-            'id': obj.organization.id,
-            'name': obj.organization.name,
-        }
 
     class Index:
         name = 'jobs'

@@ -9,8 +9,8 @@ class JobDocumentSerializer(DocumentSerializer):
         fields = (
             'id',
             'job_title',
-            'job_degree',
-            'job_organization',
+            'degree',
+            'organization',
             'locations',
             'preferred_qualifications',
             'minimum_qualifications',
