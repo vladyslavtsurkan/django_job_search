@@ -1,4 +1,4 @@
-django[argon2]==4.2.7
+django[argon2]==5.0
 djangorestframework==3.14.0
 django-jsonform==2.21.2
 django-redis==5.4.0
