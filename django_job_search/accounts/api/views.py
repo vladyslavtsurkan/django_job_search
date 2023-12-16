@@ -14,6 +14,7 @@ class UserCreateAPIView(generics.CreateAPIView):
     """View to create a new user."""
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class AuthTokenAPIView(ObtainAuthToken):
